@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>有为AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="chat">AI 智能对话</button>
+            <button class="tab-btn" data-tab="image">AI 文生图</button>
+        </nav>
+
+        <!-- AI 对话页面 -->
+        <div class="tab-content active" id="chat-tab">
+            <div class="chat-container">
+                <!-- 添加切换按钮 -->
+                <button class="toggle-sidebar-btn">
+                    <span class="toggle-icon">☰</span>
+                </button>
+
+                <!-- 对话历史侧边栏 -->
+                <div class="chat-sidebar">
+                    <div class="sidebar-header">
+                        <button id="new-chat" class="new-chat-btn">
+                            <span>+</span> 新对话
+                        </button>
+                    </div>
+                    <div class="chat-history">
+                        <!-- 历史记录会动态插入到这里 -->
+                    </div>
+                </div>
+
+                <!-- 对话主界面 -->
+                <div class="chat-main">
+                    <div id="chat-messages" class="messages">
+                        <!-- 消��会动态插入到这里 -->
+                    </div>
+
+                    <div class="input-area">
+                        <textarea 
+                            id="user-input" 
+                            placeholder="请输入您的问题..."
+                            rows="3"
+                        ></textarea>
+                        <button id="send">发送</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 文生图页面 -->
+        <div class="tab-content" id="image-tab">
+            <div class="image-container">
+                <div class="input-section">
+                    <textarea 
+                        id="image-prompt" 
+                        placeholder="请输入详细的图像描述..."
+                        rows="3"
+                    ></textarea>
+
+                    <div class="negative-prompt-section collapsed">
+                        <div class="negative-prompt-header" onclick="toggleNegativePrompt()">
+                            <span class="toggle-icon">▶</span>
+                            <span>不想出现的元素（可选）</span>
+                        </div>
+                        <textarea 
+                            id="negative-prompt" 
+                            placeholder="请���入不想在图像中出现的元素..."
+                            rows="2"
+                        ></textarea>
+                    </div>
+
+                    <div class="image-settings">
+                        <div class="settings-row">
+                            <div class="control-group compact">
+                                <label>图片尺寸 <span class="info-icon">ⓘ</span></label>
+                                <div class="radio-group">
+                                    <label class="radio-button">
+                                        <input type="radio" name="image-size" value="1024x1024" checked>
+                                        <span class="radio-content">
+                                            <div class="ratio-box square"></div>
+                                            <span class="ratio-text">1:1</span>
+                                        </span>
+                                    </label>
+                                    <label class="radio-button">
+                                        <input type="radio" name="image-size" value="512x1024">
+                                        <span class="radio-content">
+                                            <div class="ratio-box portrait"></div>
+                                            <span class="ratio-text">1:2</span>
+                                        </span>
+                                    </label>
+                                    <label class="radio-button">
+                                        <input type="radio" name="image-size" value="768x512">
+                                        <span class="radio-content">
+                                            <div class="ratio-box landscape"></div>
+                                            <span class="ratio-text">3:2</span>
+                                        </span>
+                                    </label>
+                                    <label class="radio-button">
+                                        <input type="radio" name="image-size" value="768x1024">
+                                        <span class="radio-content">
+                                            <div class="ratio-box portrait"></div>
+                                            <span class="ratio-text">3:4</span>
+                                        </span>
+                                    </label>
+                                    <label class="radio-button">
+                                        <input type="radio" name="image-size" value="1024x576">
+                                        <span class="radio-content">
+                                            <div class="ratio-box landscape"></div>
+                                            <span class="ratio-text">16:9</span>
+                                        </span>
+                                    </label>
+                                    <label class="radio-button">
+                                        <input type="radio" name="image-size" value="576x1024">
+                                        <span class="radio-content">
+                                            <div class="ratio-box portrait"></div>
+                                            <span class="ratio-text">9:16</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="control-group compact">
+                                <label>图片数量</label>
+                                <div class="radio-group">
+                                    <label class="radio-button">
+                                        <input type="radio" name="batch-size" value="1" checked>
+                                        <span class="radio-content">
+                                            <div class="number-box">1</div>
+                                        </span>
+                                    </label>
+                                    <label class="radio-button">
+                                        <input type="radio" name="batch-size" value="2">
+                                        <span class="radio-content">
+                                            <div class="number-box">2</div>
+                                        </span>
+                                    </label>
+                                    <label class="radio-button">
+                                        <input type="radio" name="batch-size" value="3">
+                                        <span class="radio-content">
+                                            <div class="number-box">3</div>
+                                        </span>
+                                    </label>
+                                    <label class="radio-button">
+                                        <input type="radio" name="batch-size" value="4">
+                                        <span class="radio-content">
+                                            <div class="number-box">4</div>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="generate">生成图像</button>
+                </div>
+
+                <div class="result-section">
+                    <div id="loading" class="hidden">生成中...</div>
+                    <div id="image-results" class="image-grid"></div>
+                    <div id="image-error" class="hidden"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <div id="image-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img id="modal-image" src="" alt="预览图片">
+            <div class="modal-actions">
+                <button id="download-image" class="modal-btn">下载图片</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
